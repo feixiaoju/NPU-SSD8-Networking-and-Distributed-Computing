@@ -2,7 +2,7 @@ package exec1;
 
 import java.io.*;
 import java.net.*;
-import java.util.Scanner;
+
 import java.util.StringTokenizer;
 import java.util.concurrent.TimeUnit;
 

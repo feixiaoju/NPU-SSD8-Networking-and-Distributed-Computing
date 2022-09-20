@@ -1,5 +1,6 @@
 package exec1;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -37,6 +38,16 @@ public class FileServer {
     }
 
     public static void main(String[] args) {
-        new FileServer().service("D:\\Java");
+        if (args.length != 1){
+            System.out.println("usage:java FileServer <dir>");
+        }else {
+            File file = new File(args[0]);
+            if (!file.isDirectory() || file.isFile()){
+                System.out.println("dir is file or wrong");
+            }else {
+                new FileServer().service(args[0]);
+            }
+        }
+
     }
 }

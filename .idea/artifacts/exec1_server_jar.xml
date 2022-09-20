@@ -1,0 +1,11 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="exec1-server:jar">
+    <output-path>$PROJECT_DIR$/src/exec1</output-path>
+    <root id="archive" name="NPU-SSD8-Networking-and-Distributed-Computing.jar">
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/src/exec1/META-INF/MANIFEST.MF" />
+      </element>
+      <element id="module-output" name="NPU-SSD8-Networking-and-Distributed-Computing" />
+    </root>
+  </artifact>
+</component>
