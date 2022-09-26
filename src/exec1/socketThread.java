@@ -9,8 +9,6 @@ import java.util.concurrent.TimeUnit;
 public class socketThread implements Runnable{
 
     private Socket socket;
-    private DatagramSocket datagramSocket;
-    private DatagramPacket datagramPacket;
     private String rootPath;
     private String currentPath;
 
@@ -97,9 +95,7 @@ public class socketThread implements Runnable{
             pw.println(file.length());
 
             DatagramSocket socket = new DatagramSocket();
-
             InetAddress inetAddress = InetAddress.getLocalHost();
-
 
             byte[] bytes = new byte[1024];
             System.out.println(file.length());
@@ -107,7 +103,7 @@ public class socketThread implements Runnable{
             DatagramPacket packet;
             int length = 0;
             while ((length = fis.read(bytes)) != -1){
-                packet = new DatagramPacket(bytes,0,bytes.length,inetAddress,2020);
+                packet = new DatagramPacket(bytes,0,bytes.length,inetAddress,UDP_PORT);
                 socket.send(packet);
             }
 
@@ -136,32 +132,32 @@ public class socketThread implements Runnable{
 
     }
 
-
     private void jumpToDirectory() {
         if(currentPath.equals(rootPath)){
             pw.println("this dir is root!");
         } else {
-            String path = "";
-            StringTokenizer stringTokenizer = new StringTokenizer(currentPath,"\\");
 
-            int count = stringTokenizer.countTokens();
+            String newPath = "";
+            String[] paths = currentPath.split("\\\\");
 
-            for(int i=0;i<count-2;i++) {
-                path = path + stringTokenizer.nextToken();
-                path += "\\";
+            for (int i = 0;i < paths.length;i++){
+                newPath = newPath + paths[0];
+                newPath += "\\";
             }
-            path = path+stringTokenizer.nextToken();
-            currentPath = path;
+
+            currentPath = newPath;
             pw.println(currentPath + " > OK");
+
         }
 
     }
+
     private void showDirectory(String dir) {
         File directory = new File(dir);
         File[] files = directory.listFiles();
         for(File file:files) {
             if(file.isDirectory()) {
-                pw.print("<dir>          "+file.getName() +"    ");
+                pw.print("<dir>\t\t\t"+file.getName() +"\t");
                 int i = 20-file.getName().length();
                 if(i > 1){
                     for(int j = 0;j < i;j++){
@@ -173,7 +169,7 @@ public class socketThread implements Runnable{
                 pw.print(file.length()/1000+"KB"+"\n");
 
             } else if(file.isFile()) {
-                pw.print("<file>         "+file.getName() +"    ");
+                pw.print("<file>\t\t\t"+file.getName() +"\t");
                 int i = 20-file.getName().length();
                 if(i > 1){
                     for(int j = 0;j < i;j++){

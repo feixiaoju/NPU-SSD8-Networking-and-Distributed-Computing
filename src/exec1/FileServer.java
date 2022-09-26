@@ -23,7 +23,7 @@ public class FileServer {
         }
     }
 
-    public void service(String path){
+    public void service(String path) throws IOException {
         System.out.println("root is " + path);
         Socket socket;
         try {
@@ -33,11 +33,13 @@ public class FileServer {
             }
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            serverSocket.close();
         }
 
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         if (args.length != 1){
             System.out.println("usage:java FileServer <dir>");
         }else {

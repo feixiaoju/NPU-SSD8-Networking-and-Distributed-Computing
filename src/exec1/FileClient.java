@@ -11,10 +11,8 @@ import java.util.Scanner;
  */
 public class FileClient {
     private Socket socket;
-    private DatagramSocket datagramSocket;
     private BufferedReader br;
     private PrintWriter pw;
-    private FileOutputStream fileOutputStream;
     private Scanner sc;
 
     private String host = "127.0.0.1";
@@ -42,7 +40,7 @@ public class FileClient {
         }
     }
 
-    public void work(){
+    public void work() throws IOException {
         initStream();
         String command;
         String response;
@@ -64,8 +62,12 @@ public class FileClient {
                     }
                 }
             }
+
         }catch (IOException e) {
             e.printStackTrace();
+        }finally {
+            socket.close();
+            sc.close();
         }
 
 
@@ -73,7 +75,7 @@ public class FileClient {
 
     private void getFile(String fileName) throws IOException {
 
-        DatagramSocket socket = new DatagramSocket(2020);
+        DatagramSocket socket = new DatagramSocket(UDP_PORT);
 
         byte[] bytes = new byte[1024];
 
@@ -81,17 +83,17 @@ public class FileClient {
 
         File file = new File(fileName);
         FileOutputStream fos = new FileOutputStream(file);
-        int packNum = (int) ((file.length() / 1024) + 1);
+        int packNum = (int) ((file.length() / 1024) + 1); // 计算数据包个数
         for (int i = 0; i < packNum; i++) {
             socket.receive(packet);
             fos.write(packet.getData(),0,packet.getLength());
         }
-        System.out.println("接收完毕");
+        System.out.println("receive over");
         socket.close();
         fos.close();
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         new FileClient().work();
     }
 }
